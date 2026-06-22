@@ -4,7 +4,7 @@
 
 module "vnet" {
   source  = "Azure/avm-res-network-virtualnetwork/azurerm"
-  version = "~> 0.7.0"
+  version = "0.17.1"
 
   name          = "nutriai-vnet-${var.environment}"
   parent_id     = azurerm_resource_group.rg.id
