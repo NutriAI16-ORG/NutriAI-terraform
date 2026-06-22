@@ -5,6 +5,7 @@ output "workload_identity_client_id" {
 
 output "workload_identity_tenant_id" {
   value       = var.entra_tenant_id
+  sensitive   = true
   description = "The Tenant ID of the Entra Directory"
 }
 
