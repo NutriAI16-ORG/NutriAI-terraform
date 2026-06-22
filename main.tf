@@ -29,7 +29,7 @@ module "monitoring" {
   keyvault_id             = module.keyvault.resource_id
   postgres_server_id      = module.postgres.postgres_id
   servicebus_namespace_id = module.servicebus.namespace_id
-  storage_account_id      = "/subscriptions/${data.azurerm_client_config.current.subscription_id}/resourceGroups/${var.manual_storage_account_rg}/providers/Microsoft.Storage/storageAccounts/${var.manual_storage_account_name}"
+  storage_account_id      = azurerm_storage_account.storage.id
   appgw_id                = module.appgateway.app_gateway_id
 }
 
@@ -141,10 +141,24 @@ resource "azurerm_federated_identity_credential" "aks_workload_fed" {
   subject             = "system:serviceaccount:nutriai-${var.environment}:nutriai-service-account"
 }
 
-# --- Data Lookup for Manually Created Storage Account ---
-data "azurerm_storage_account" "manual_storage" {
-  name                = var.manual_storage_account_name
-  resource_group_name = var.manual_storage_account_rg
+# --- Provisioning Application Storage Account and Container ---
+resource "azurerm_storage_account" "storage" {
+  name                     = var.storage_account_name
+  resource_group_name      = azurerm_resource_group.rg.name
+  location                 = azurerm_resource_group.rg.location
+  account_tier             = "Standard"
+  account_replication_type = "LRS"
+
+  tags = {
+    Environment = var.environment
+    Project     = "NutriAI"
+  }
+}
+
+resource "azurerm_storage_container" "storage_container" {
+  name                  = var.storage_container_name
+  storage_account_name  = azurerm_storage_account.storage.name
+  container_access_type = "private"
 }
 
 # --- Key Vault Secrets Provisioning ---
@@ -205,7 +219,7 @@ resource "azurerm_key_vault_secret" "postgres_password" {
 
 resource "azurerm_key_vault_secret" "storage_connection_string" {
   name         = "storage-connection-string"
-  value        = data.azurerm_storage_account.manual_storage.primary_connection_string
+  value        = azurerm_storage_account.storage.primary_connection_string
   key_vault_id = module.keyvault.resource_id
   depends_on   = [module.keyvault]
 }
@@ -254,7 +268,7 @@ resource "azurerm_key_vault_secret" "entra_redirect_uri" {
 
 resource "azurerm_key_vault_secret" "azure_storage_connection_string" {
   name         = "azure-storage-connection-string"
-  value        = data.azurerm_storage_account.manual_storage.primary_connection_string
+  value        = azurerm_storage_account.storage.primary_connection_string
   key_vault_id = module.keyvault.resource_id
   depends_on   = [module.keyvault]
 }

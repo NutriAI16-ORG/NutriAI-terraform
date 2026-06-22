@@ -121,18 +121,13 @@ variable "entra_redirect_uri" {
   sensitive   = true
 }
 
-variable "manual_storage_account_name" {
+variable "storage_account_name" {
   type        = string
-  description = "Name of the manually created Storage Account"
+  description = "Name of the Storage Account for app data (managed by Terraform)"
 }
 
-variable "manual_storage_account_rg" {
+variable "storage_container_name" {
   type        = string
-  description = "Resource group of the manually created Storage Account"
-}
-
-variable "manual_storage_container_name" {
-  type        = string
-  description = "Name of the manually created Storage Container for app data"
+  description = "Name of the Storage Container for app data (managed by Terraform)"
   default     = "nutriai-app-data"
 }

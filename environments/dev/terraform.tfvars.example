@@ -41,7 +41,6 @@ openai_model_version = "2025-11-13"
 # - entra_redirect_uri
 
 
-# Pre-created Manual Storage Account details (for tfstate and app data)
-manual_storage_account_name   = "nutriaimtfstatestore"
-manual_storage_account_rg     = "nutriai-manual-rg"
-manual_storage_container_name = "nutriai-app-data"
+# Storage Account details (for app data)
+storage_account_name   = "nutriaimtfstatestore"
+storage_container_name = "nutriai-app-data"

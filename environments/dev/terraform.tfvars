@@ -42,7 +42,6 @@ openai_model_name    = "gpt-5.1"
 openai_model_version = "2025-11-13"
 
 
-# Pre-created manual Storage Account (for app blob data)
-manual_storage_account_name   = "nutriaistgdev"
-manual_storage_account_rg     = "nutriai-manual-rg"
-manual_storage_container_name = "nutriai-app-data"
+# Storage Account (for app blob data)
+storage_account_name   = "nutriaistgdev"
+storage_container_name = "nutriai-app-data"
