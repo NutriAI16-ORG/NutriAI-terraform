@@ -88,7 +88,7 @@ jobs:
           fi
 
       # ────────────────────────────────────────────────────────
-      # Install dependencies (unzip, azure-cli)
+      # Install dependencies (unzip, azure-cli, nodejs)
       # ────────────────────────────────────────────────────────
       - name: "Install dependencies"
         run: |
@@ -102,6 +102,10 @@ jobs:
             echo "azure-cli not found, installing..."
             curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash
           fi
+          if ! command -v node &> /dev/null; then
+            echo "node not found, installing..."
+            sudo apt-get install -y nodejs
+          fi
 
       # ────────────────────────────────────────────────────────
       # 3. Install Terraform
@@ -110,6 +114,7 @@ jobs:
         uses: hashicorp/setup-terraform@v3
         with:
           terraform_version: ${{ env.TF_VERSION }}
+          terraform_wrapper: false
 
       # ────────────────────────────────────────────────────────
       # 4. Azure Login using Runner's System-Assigned Managed Identity
