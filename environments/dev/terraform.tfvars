@@ -28,7 +28,7 @@ postgres_admin_user = "nutriai_admin"
 # postgres_admin_password → injected from GitHub Secrets at pipeline runtime
 
 # Jump VM
-vm_size = "Standard_D2ls_v5"
+vm_size = "Standard_D2s_v3"
 # vm_admin_password → injected from GitHub Secrets at pipeline runtime
 
 # Resource naming

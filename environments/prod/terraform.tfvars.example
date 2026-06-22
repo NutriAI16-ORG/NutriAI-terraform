@@ -22,7 +22,7 @@ postgres_admin_password = "SecureProdPassword987!" # Change to a secure password
 
 # Jump VM configuration
 vm_admin_password = "SecureProdJumpVMPassword987!" # Change to a secure password
-vm_size           = "Standard_D2ls_v5"
+vm_size           = "Standard_D2s_v3"
 
 # Resource naming
 keyvault_name    = "nutriai-kv-prod"
