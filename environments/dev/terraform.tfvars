@@ -9,7 +9,7 @@
 
 environment             = "dev"
 resource_group_name     = "nutriai-rg-dev"
-location                = "East US 2"
+location                = "japanwest"
 enable_role_assignments = false
 
 # Networking
