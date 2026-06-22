@@ -76,12 +76,7 @@ resource "azurerm_application_gateway" "appgw" {
     backend_http_settings_name = local.http_setting_name
   }
 
-  waf_configuration {
-    enabled          = true
-    firewall_mode    = "Prevention"
-    rule_set_type    = "OWASP"
-    rule_set_version = "3.2"
-  }
+  firewall_policy_id = azurerm_web_application_firewall_policy.waf_policy.id
 
   # Ignore changes dynamically managed by AGIC inside Kubernetes
   lifecycle {
@@ -95,6 +90,32 @@ resource "azurerm_application_gateway" "appgw" {
       ssl_certificate,
       tags
     ]
+  }
+
+  tags = {
+    Environment = var.environment
+    Project     = "NutriAI"
+  }
+}
+
+resource "azurerm_web_application_firewall_policy" "waf_policy" {
+  name                = "nutriai-waf-policy-${var.environment}"
+  resource_group_name = var.resource_group_name
+  location            = var.location
+
+  policy_settings {
+    enabled       = true
+    mode          = "Prevention"
+    request_body_check = true
+    max_request_body_size_in_kb = 128
+    file_upload_limit_in_mb = 100
+  }
+
+  managed_rules {
+    managed_rule_set {
+      type    = "OWASP"
+      version = "3.2"
+    }
   }
 
   tags = {

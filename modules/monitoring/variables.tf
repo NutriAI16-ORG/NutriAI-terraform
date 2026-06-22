@@ -53,3 +53,8 @@ variable "appgw_id" {
   description = "ID of the Application Gateway"
   default     = null
 }
+
+variable "enable_role_assignments" {
+  type    = bool
+  default = true
+}

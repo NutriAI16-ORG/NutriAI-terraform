@@ -29,6 +29,7 @@ module "bastion" {
     name                 = "bastion-ip-config"
     subnet_id            = module.vnet.subnets["bastion"].resource_id
     public_ip_address_id = azurerm_public_ip.bastion_pip.id
+    create_public_ip     = false
   }
 
   tags = {

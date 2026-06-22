@@ -31,6 +31,7 @@ module "monitoring" {
   servicebus_namespace_id = module.servicebus.namespace_id
   storage_account_id      = azurerm_storage_account.storage.id
   appgw_id                = module.appgateway.app_gateway_id
+  enable_role_assignments = var.enable_role_assignments
 }
 
 # --- Module 3: Application Gateway ---
@@ -50,6 +51,7 @@ module "acr" {
   environment                    = var.environment
   acr_name                       = var.acr_name
   aks_kubelet_identity_object_id = module.aks.kubelet_identity.objectId
+  enable_role_assignments        = var.enable_role_assignments
 }
 
 # --- Module 5: PostgreSQL Server ---
@@ -72,6 +74,7 @@ module "servicebus" {
   environment                    = var.environment
   namespace_name                 = "nutriai-sb-${var.environment}"
   workload_identity_principal_id = module.identity.workload_identity_principal_id
+  enable_role_assignments        = var.enable_role_assignments
 }
 
 # --- Shared Cognitive Services Private DNS Zone ---

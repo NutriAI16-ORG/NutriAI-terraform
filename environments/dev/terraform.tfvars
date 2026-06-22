@@ -9,7 +9,8 @@
 
 environment         = "dev"
 resource_group_name = "nutriai-rg-dev"
-location            = "East US"
+location            = "East US 2"
+enable_role_assignments = false
 
 # Networking
 vnet_cidr = "10.0.0.0/16"

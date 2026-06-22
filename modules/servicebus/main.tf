@@ -23,12 +23,14 @@ resource "azurerm_servicebus_subscription" "sub" {
 
 # Role Assignments for Workload Identity
 resource "azurerm_role_assignment" "sb_sender" {
+  count                = var.enable_role_assignments ? 1 : 0
   scope                = azurerm_servicebus_namespace.sb.id
   role_definition_name = "Azure Service Bus Data Sender"
   principal_id         = var.workload_identity_principal_id
 }
 
 resource "azurerm_role_assignment" "sb_receiver" {
+  count                = var.enable_role_assignments ? 1 : 0
   scope                = azurerm_servicebus_namespace.sb.id
   role_definition_name = "Azure Service Bus Data Receiver"
   principal_id         = var.workload_identity_principal_id

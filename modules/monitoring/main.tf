@@ -59,12 +59,14 @@ resource "azurerm_dashboard_grafana" "grafana" {
 
 # Role assignments for Grafana System Identity
 resource "azurerm_role_assignment" "grafana_monitoring_reader" {
+  count                = var.enable_role_assignments ? 1 : 0
   scope                = var.resource_group_id
   role_definition_name = "Monitoring Reader"
   principal_id         = azurerm_dashboard_grafana.grafana.identity[0].principal_id
 }
 
 resource "azurerm_role_assignment" "grafana_metrics_reader" {
+  count                = var.enable_role_assignments ? 1 : 0
   scope                = azurerm_monitor_workspace.prometheus.id
   role_definition_name = "Monitoring Data Reader"
   principal_id         = azurerm_dashboard_grafana.grafana.identity[0].principal_id

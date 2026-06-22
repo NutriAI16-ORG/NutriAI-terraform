@@ -34,3 +34,8 @@ variable "workload_identity_principal_id" {
   type        = string
   description = "The principal ID of the Workload Managed Identity for RBAC role assignments"
 }
+
+variable "enable_role_assignments" {
+  type    = bool
+  default = true
+}

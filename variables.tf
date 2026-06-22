@@ -131,3 +131,9 @@ variable "storage_container_name" {
   description = "Name of the Storage Container for app data (managed by Terraform)"
   default     = "nutriai-app-data"
 }
+
+variable "enable_role_assignments" {
+  type        = bool
+  description = "Whether to create RBAC role assignments (disable if service principal lacks Owner permissions)"
+  default     = true
+}

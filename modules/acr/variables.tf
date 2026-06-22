@@ -22,3 +22,8 @@ variable "aks_kubelet_identity_object_id" {
   type        = string
   description = "The principal ID of the AKS kubelet identity for AcrPull assignment"
 }
+
+variable "enable_role_assignments" {
+  type    = bool
+  default = true
+}
