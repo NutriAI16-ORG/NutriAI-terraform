@@ -3,8 +3,8 @@
 # =============================================================
 # SAFE TO COMMIT — no sensitive values in this file.
 # Sensitive values (postgres_admin_password, vm_admin_password,
-# smtp_password) are injected at pipeline runtime from
-# Bootstrap Key Vault via the runner's Managed Identity.
+# smtp_password, etc.) are injected at pipeline runtime from
+# GitHub Secrets.
 # =============================================================
 
 environment         = "prod"
@@ -24,11 +24,11 @@ subnet_prefixes = {
 
 # PostgreSQL
 postgres_admin_user = "nutriai_admin"
-# postgres_admin_password → injected from Bootstrap KV at pipeline runtime
+# postgres_admin_password → injected from GitHub Secrets at pipeline runtime
 
 # Jump VM
 vm_size = "Standard_D2ls_v5"
-# vm_admin_password → injected from Bootstrap KV at pipeline runtime
+# vm_admin_password → injected from GitHub Secrets at pipeline runtime
 
 # Resource naming
 keyvault_name    = "nutriai-kv-prod"
