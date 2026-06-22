@@ -50,4 +50,8 @@ resource "azurerm_private_endpoint" "openai_pe" {
     Environment = var.environment
     Project     = "NutriAI"
   }
+
+  depends_on = [
+    azurerm_cognitive_deployment.openai_model
+  ]
 }

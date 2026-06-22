@@ -35,6 +35,13 @@ resource "azurerm_postgresql_flexible_server" "postgres" {
     Environment = var.environment
     Project     = "NutriAI"
   }
+
+  lifecycle {
+    ignore_changes = [
+      zone,
+      high_availability
+    ]
+  }
 }
 
 resource "azurerm_postgresql_flexible_server_database" "db" {

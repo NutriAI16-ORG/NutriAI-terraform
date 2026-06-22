@@ -25,7 +25,7 @@ vm_admin_password = "SecureJumpVMPassword123!" # Change to a secure password
 vm_size           = "Standard_D2s_v3"
 
 # Resource naming
-keyvault_name    = "nutriai-kv-dev"
+keyvault_name    = "nutriai-kv-dev-v2"
 acr_name         = "nutriaiacrdev"
 aks_cluster_name = "nutriai-aks-dev"
 

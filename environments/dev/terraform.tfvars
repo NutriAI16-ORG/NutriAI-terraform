@@ -32,7 +32,7 @@ vm_size = "Standard_D2s_v3"
 # vm_admin_password → injected from GitHub Secrets at pipeline runtime
 
 # Resource naming
-keyvault_name    = "nutriai-kv-dev"
+keyvault_name    = "nutriai-kv-dev-v2"
 acr_name         = "nutriaiacrdev"
 aks_cluster_name = "nutriai-aks-dev"
 

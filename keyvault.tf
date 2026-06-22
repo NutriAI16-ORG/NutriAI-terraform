@@ -47,7 +47,7 @@ module "keyvault" {
     }
   }
 
-  role_assignments = {
+  role_assignments = var.enable_role_assignments ? {
     workload_secrets_user = {
       role_definition_id_or_name = "Key Vault Secrets User"
       principal_id               = module.identity.workload_identity_principal_id
@@ -68,7 +68,7 @@ module "keyvault" {
       role_definition_id_or_name = "Key Vault Secrets Officer"
       principal_id               = data.azurerm_client_config.current.object_id
     }
-  }
+  } : {}
 
   tags = {
     Environment = var.environment
