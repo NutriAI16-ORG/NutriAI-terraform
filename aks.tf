@@ -4,7 +4,7 @@
 
 module "aks" {
   source  = "Azure/avm-res-containerservice-managedcluster/azurerm"
-  version = "~> 0.3"
+  version = "0.5.0"
 
   name      = var.aks_cluster_name
   parent_id = azurerm_resource_group.rg.id
