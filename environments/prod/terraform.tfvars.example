@@ -1,0 +1,47 @@
+# --- Prod Environment Configuration Variables ---
+
+# Resource group and deployment region
+resource_group_name = "nutriai-rg-prod"
+location            = "East US"
+
+# Networking ranges
+vnet_cidr = "10.1.0.0/16"
+subnet_prefixes = {
+  appgw     = "10.1.1.0/24"
+  aks       = "10.1.2.0/24"
+  database  = "10.1.3.0/24"
+  endpoints = "10.1.4.0/24"
+  vm        = "10.1.5.0/24"
+  bastion   = "10.1.6.0/26"
+}
+
+# PostgreSQL configuration
+postgres_admin_user     = "nutriai_admin"
+postgres_admin_password = "SecureProdPassword987!" # Change to a secure password
+
+# Jump VM configuration
+vm_admin_password = "SecureProdJumpVMPassword987!" # Change to a secure password
+vm_size           = "Standard_D2ls_v5"
+
+# Resource naming
+keyvault_name    = "nutriai-kv-prod"
+acr_name         = "nutriaiacrprod"
+aks_cluster_name = "nutriai-aks-prod"
+
+# AI service parameters
+openai_model_name    = "gpt-5.1"
+openai_model_version = "2025-11-13"
+
+# SMTP & Entra ID configuration (sensitive variables injected at pipeline runtime or via environment variables)
+# - smtp_username
+# - smtp_password
+# - entra_tenant_id
+# - entra_client_id
+# - entra_client_secret
+# - entra_redirect_uri
+
+
+# Pre-created Manual Storage Account details (for tfstate and app data)
+manual_storage_account_name   = "nutriaimtfstatestore"
+manual_storage_account_rg     = "nutriai-manual-rg"
+manual_storage_container_name = "nutriai-app-data"
