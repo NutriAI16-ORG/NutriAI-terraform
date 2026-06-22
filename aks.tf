@@ -19,6 +19,7 @@ module "aks" {
 
   api_server_access_profile = {
     enable_private_cluster = true
+    private_dns_zone       = "system"
   }
 
   oidc_issuer_profile = {
@@ -40,7 +41,7 @@ module "aks" {
     min_count           = 1
     max_count           = 2
     os_disk_size_gb     = 30
-    availability_zones  = ["1", "2", "3"]
+    availability_zones  = ["2", "3"]
   }
 
   managed_identities = {
