@@ -103,7 +103,6 @@ resource "azurerm_monitor_data_collection_rule" "prometheus_dcr" {
 }
 
 resource "azurerm_monitor_data_collection_rule_association" "prometheus_dcra" {
-  count                   = var.aks_cluster_id != null ? 1 : 0
   name                    = "nutriai-prom-dcra-${var.environment}"
   target_resource_id      = var.aks_cluster_id
   data_collection_rule_id = azurerm_monitor_data_collection_rule.prometheus_dcr.id
@@ -112,7 +111,6 @@ resource "azurerm_monitor_data_collection_rule_association" "prometheus_dcra" {
 # --- Diagnostic Settings Fan-Out ---
 
 resource "azurerm_monitor_diagnostic_setting" "aks" {
-  count                      = var.aks_cluster_id != null ? 1 : 0
   name                       = "aks-diagnostics"
   target_resource_id         = var.aks_cluster_id
   log_analytics_workspace_id = azurerm_log_analytics_workspace.law.id
@@ -130,7 +128,6 @@ resource "azurerm_monitor_diagnostic_setting" "aks" {
 }
 
 resource "azurerm_monitor_diagnostic_setting" "keyvault" {
-  count                      = var.keyvault_id != null ? 1 : 0
   name                       = "kv-diagnostics"
   target_resource_id         = var.keyvault_id
   log_analytics_workspace_id = azurerm_log_analytics_workspace.law.id
@@ -145,7 +142,6 @@ resource "azurerm_monitor_diagnostic_setting" "keyvault" {
 }
 
 resource "azurerm_monitor_diagnostic_setting" "postgres" {
-  count                      = var.postgres_server_id != null ? 1 : 0
   name                       = "postgres-diagnostics"
   target_resource_id         = var.postgres_server_id
   log_analytics_workspace_id = azurerm_log_analytics_workspace.law.id
@@ -160,7 +156,6 @@ resource "azurerm_monitor_diagnostic_setting" "postgres" {
 }
 
 resource "azurerm_monitor_diagnostic_setting" "servicebus" {
-  count                      = var.servicebus_namespace_id != null ? 1 : 0
   name                       = "sb-diagnostics"
   target_resource_id         = var.servicebus_namespace_id
   log_analytics_workspace_id = azurerm_log_analytics_workspace.law.id
@@ -175,7 +170,6 @@ resource "azurerm_monitor_diagnostic_setting" "servicebus" {
 }
 
 resource "azurerm_monitor_diagnostic_setting" "storage" {
-  count                      = var.storage_account_id != null ? 1 : 0
   name                       = "storage-diagnostics"
   target_resource_id         = "${var.storage_account_id}/blobServices/default"
   log_analytics_workspace_id = azurerm_log_analytics_workspace.law.id
@@ -196,7 +190,6 @@ resource "azurerm_monitor_diagnostic_setting" "storage" {
 }
 
 resource "azurerm_monitor_diagnostic_setting" "appgw" {
-  count                      = var.appgw_id != null ? 1 : 0
   name                       = "appgw-diagnostics"
   target_resource_id         = var.appgw_id
   log_analytics_workspace_id = azurerm_log_analytics_workspace.law.id
