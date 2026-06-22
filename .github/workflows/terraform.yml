@@ -122,7 +122,10 @@ jobs:
       #    az login picks up the IMDS endpoint automatically.
       # ────────────────────────────────────────────────────────
       - name: "Azure Login (Managed Identity)"
-        run: az login --identity --output none
+        run: |
+          az login --identity --output none
+          echo "ARM_SUBSCRIPTION_ID=$(az account show --query id --output tsv)" >> $GITHUB_ENV
+          echo "ARM_TENANT_ID=$(az account show --query tenantId --output tsv)" >> $GITHUB_ENV
 
 
       # ────────────────────────────────────────────────────────
