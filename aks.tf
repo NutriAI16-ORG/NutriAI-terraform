@@ -4,7 +4,7 @@
 
 module "aks" {
   source  = "Azure/avm-res-containerservice-managedcluster/azurerm"
-  version = "~> 0.3"
+  version = "~> 0.6.0"
 
   name      = var.aks_cluster_name
   parent_id = azurerm_resource_group.rg.id
@@ -34,11 +34,11 @@ module "aks" {
   default_agent_pool = {
     name                = "systempool"
     vm_size             = var.vm_size
-    node_count          = 1
+    count_of            = 1
     vnet_subnet_id      = module.vnet.subnets["aks"].resource_id
     enable_auto_scaling = true
     min_count           = 1
-    max_count           = 3
+    max_count           = 2
     os_disk_size_gb     = 30
     availability_zones  = ["1", "2", "3"]
   }
