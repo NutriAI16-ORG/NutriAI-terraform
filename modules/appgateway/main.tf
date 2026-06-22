@@ -104,11 +104,11 @@ resource "azurerm_web_application_firewall_policy" "waf_policy" {
   location            = var.location
 
   policy_settings {
-    enabled       = true
-    mode          = "Prevention"
-    request_body_check = true
+    enabled                     = true
+    mode                        = "Prevention"
+    request_body_check          = true
     max_request_body_size_in_kb = 128
-    file_upload_limit_in_mb = 100
+    file_upload_limit_in_mb     = 100
   }
 
   managed_rules {

@@ -8,6 +8,7 @@ resource "azurerm_public_ip" "bastion_pip" {
   resource_group_name = azurerm_resource_group.rg.name
   allocation_method   = "Static"
   sku                 = "Standard"
+  zones               = ["1", "2", "3"]
 
   tags = {
     Environment = var.environment

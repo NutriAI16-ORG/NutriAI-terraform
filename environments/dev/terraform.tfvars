@@ -7,9 +7,9 @@
 # GitHub Secrets.
 # =============================================================
 
-environment         = "dev"
-resource_group_name = "nutriai-rg-dev"
-location            = "East US 2"
+environment             = "dev"
+resource_group_name     = "nutriai-rg-dev"
+location                = "East US 2"
 enable_role_assignments = false
 
 # Networking

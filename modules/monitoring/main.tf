@@ -155,6 +155,10 @@ resource "azurerm_monitor_diagnostic_setting" "postgres" {
   enabled_metric {
     category = "AllMetrics"
   }
+
+  lifecycle {
+    ignore_changes = [name]
+  }
 }
 
 resource "azurerm_monitor_diagnostic_setting" "servicebus" {
@@ -188,6 +192,10 @@ resource "azurerm_monitor_diagnostic_setting" "storage" {
 
   enabled_metric {
     category = "AllMetrics"
+  }
+
+  lifecycle {
+    ignore_changes = [name]
   }
 }
 
