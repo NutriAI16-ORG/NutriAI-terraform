@@ -1,3 +1,24 @@
+# ==============================================================================
+# Import blocks — prod-only orphaned diagnostic settings
+# These two resources were created in a previous partial apply run but were
+# never saved to state before the pipeline errored. On the next apply Terraform
+# will import them automatically (Terraform 1.5+) and then no-op on them.
+#
+# IMPORTANT: Remove these import blocks after the first successful apply that
+# shows 0 to add / 0 to destroy for these two resources, otherwise they will
+# error on subsequent runs once the resource is already in state.
+# ==============================================================================
+
+import {
+  id = "/subscriptions/34c41824-bb7a-4316-af37-2597f35b730e/resourceGroups/nutriai-rg-prod/providers/Microsoft.DBforPostgreSQL/flexibleServers/nutriai-postgres-prod|postgres-diagnostics"
+  to = azurerm_monitor_diagnostic_setting.postgres
+}
+
+import {
+  id = "/subscriptions/34c41824-bb7a-4316-af37-2597f35b730e/resourceGroups/nutriai-rg-prod/providers/Microsoft.Storage/storageAccounts/nutriaistgprod/blobServices/default|storage-diagnostics"
+  to = azurerm_monitor_diagnostic_setting.storage
+}
+
 resource "azurerm_log_analytics_workspace" "law" {
   name                = "nutriai-law-${var.environment}"
   location            = var.location
