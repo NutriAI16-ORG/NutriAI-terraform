@@ -43,7 +43,7 @@ resource "azurerm_private_endpoint" "openai_pe" {
 
   private_dns_zone_group {
     name                 = "openai-dns-zone-group-${var.environment}"
-    private_dns_zone_ids = [var.cognitive_dns_zone_id]
+    private_dns_zone_ids = [var.cognitive_dns_zone_id, var.openai_direct_dns_zone_id]
   }
 
   tags = {

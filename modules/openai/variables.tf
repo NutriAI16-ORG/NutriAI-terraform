@@ -39,3 +39,8 @@ variable "openai_model_version" {
   description = "The version of the OpenAI model to deploy (e.g. 2025-11-13)"
   default     = "2025-11-13"
 }
+
+variable "openai_direct_dns_zone_id" {
+  type        = string
+  description = "ID of the Private DNS Zone for direct openai.azure.com"
+}

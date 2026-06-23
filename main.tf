@@ -95,19 +95,41 @@ resource "azurerm_private_dns_zone_virtual_network_link" "cog_dns_link" {
   virtual_network_id    = module.vnet.resource_id
 }
 
+# --- Shared OpenAI Direct Private DNS Zone ---
+resource "azurerm_private_dns_zone" "openai_direct_dns" {
+  name                = "openai.azure.com"
+  resource_group_name = azurerm_resource_group.rg.name
+
+  tags = {
+    Environment = var.environment
+    Project     = "NutriAI"
+  }
+}
+
+resource "azurerm_private_dns_zone_virtual_network_link" "openai_direct_dns_link" {
+  name                  = "openai-direct-dns-link-${var.environment}"
+  resource_group_name   = azurerm_resource_group.rg.name
+  private_dns_zone_name = azurerm_private_dns_zone.openai_direct_dns.name
+  virtual_network_id    = module.vnet.resource_id
+}
+
 # --- Module 7: Azure OpenAI ---
 module "openai" {
-  source                = "./modules/openai"
-  resource_group_name   = azurerm_resource_group.rg.name
-  location              = azurerm_resource_group.rg.location
-  environment           = var.environment
-  account_name          = "nutriai-openai-${var.environment}-v3"
-  endpoints_subnet_id   = module.vnet.subnets["endpoints"].resource_id
-  cognitive_dns_zone_id = azurerm_private_dns_zone.cog_dns.id
-  openai_model_name     = var.openai_model_name
-  openai_model_version  = var.openai_model_version
+  source                    = "./modules/openai"
+  resource_group_name       = azurerm_resource_group.rg.name
+  location                  = azurerm_resource_group.rg.location
+  environment               = var.environment
+  account_name              = "nutriai-openai-${var.environment}-v3"
+  endpoints_subnet_id       = module.vnet.subnets["endpoints"].resource_id
+  cognitive_dns_zone_id     = azurerm_private_dns_zone.cog_dns.id
+  openai_direct_dns_zone_id = azurerm_private_dns_zone.openai_direct_dns.id
+  openai_model_name         = var.openai_model_name
+  openai_model_version      = var.openai_model_version
 
-  depends_on = [azurerm_private_dns_zone_virtual_network_link.cog_dns_link]
+  depends_on = [
+    azurerm_private_dns_zone_virtual_network_link.cog_dns_link,
+    azurerm_private_dns_zone_virtual_network_link.openai_direct_dns_link
+  ]
 }
 
 # --- Module 8: Document Intelligence ---
