@@ -38,6 +38,9 @@ module "vnet" {
     vm = {
       name             = "vm-subnet"
       address_prefixes = [var.subnet_prefixes["vm"]]
+      nat_gateway = {
+        id = azurerm_nat_gateway.nat.id
+      }
     }
     bastion = {
       name             = "AzureBastionSubnet"
@@ -85,10 +88,6 @@ resource "azurerm_nat_gateway_public_ip_association" "nat_assoc" {
   public_ip_address_id = azurerm_public_ip.nat_pip.id
 }
 
-resource "azurerm_subnet_nat_gateway_association" "vm_nat" {
-  subnet_id      = module.vnet.subnets["vm"].resource_id
-  nat_gateway_id = azurerm_nat_gateway.nat.id
-}
 
 # ------------------------------------------------------------------------------
 # Network Security Groups
