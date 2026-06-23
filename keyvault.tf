@@ -35,7 +35,7 @@ module "keyvault" {
   network_acls = {
     bypass         = "AzureServices"
     default_action = "Deny"
-    ip_rules       = []
+    ip_rules       = ["172.200.169.205"]
   }
 
   private_endpoints = {
