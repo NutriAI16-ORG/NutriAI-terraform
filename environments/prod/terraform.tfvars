@@ -44,5 +44,5 @@ openai_model_version = "2025-11-13"
 
 
 # Storage Account (for app blob data)
-storage_account_name   = "nutriaistgprod"
+storage_account_name   = "nutriaistgprodv3"
 storage_container_name = "nutriai-app-data"

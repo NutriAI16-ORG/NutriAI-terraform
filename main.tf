@@ -101,7 +101,7 @@ module "openai" {
   resource_group_name   = azurerm_resource_group.rg.name
   location              = azurerm_resource_group.rg.location
   environment           = var.environment
-  account_name          = "nutriai-openai-${var.environment}"
+  account_name          = "nutriai-openai-${var.environment}-v3"
   endpoints_subnet_id   = module.vnet.subnets["endpoints"].resource_id
   cognitive_dns_zone_id = azurerm_private_dns_zone.cog_dns.id
   openai_model_name     = var.openai_model_name
@@ -116,7 +116,7 @@ module "document_intelligence" {
   resource_group_name   = azurerm_resource_group.rg.name
   location              = azurerm_resource_group.rg.location
   environment           = var.environment
-  account_name          = "nutriai-docintel-${var.environment}"
+  account_name          = "nutriai-docintel-${var.environment}-v3"
   endpoints_subnet_id   = module.vnet.subnets["endpoints"].resource_id
   cognitive_dns_zone_id = azurerm_private_dns_zone.cog_dns.id
 
