@@ -331,3 +331,18 @@ resource "azurerm_key_vault_secret" "appinsights_connection_string" {
   key_vault_id = module.keyvault.resource_id
   depends_on   = [module.keyvault]
 }
+
+# --- AGIC (Application Gateway Ingress Controller) Role Assignments ---
+resource "azurerm_role_assignment" "agic_reader" {
+  count                = var.enable_role_assignments ? 1 : 0
+  scope                = azurerm_resource_group.rg.id
+  role_definition_name = "Reader"
+  principal_id         = module.aks.ingress_app_object_id
+}
+
+resource "azurerm_role_assignment" "agic_contributor" {
+  count                = var.enable_role_assignments ? 1 : 0
+  scope                = module.appgateway.app_gateway_id
+  role_definition_name = "Contributor"
+  principal_id         = module.aks.ingress_app_object_id
+}
