@@ -346,3 +346,10 @@ resource "azurerm_role_assignment" "agic_contributor" {
   role_definition_name = "Contributor"
   principal_id         = module.aks.ingress_app_object_id
 }
+
+resource "azurerm_role_assignment" "agic_network_contributor" {
+  count                = var.enable_role_assignments ? 1 : 0
+  scope                = module.vnet.resource_id
+  role_definition_name = "Network Contributor"
+  principal_id         = module.aks.ingress_app_object_id
+}
