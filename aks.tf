@@ -49,7 +49,7 @@ module "aks" {
       name                = "userpool"
       mode                = "User"
       vm_size             = var.aks_vm_size
-      count_of            = 2
+      count_of            = 1
       vnet_subnet_id      = module.vnet.subnets["aks"].resource_id
       enable_auto_scaling = true
       min_count           = 1
