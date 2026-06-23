@@ -15,7 +15,7 @@ module "aks" {
     tier = "Standard"
   }
 
-  kubernetes_version = "1.30"
+  kubernetes_version = "1.34"
 
   api_server_access_profile = {
     enable_private_cluster = true
