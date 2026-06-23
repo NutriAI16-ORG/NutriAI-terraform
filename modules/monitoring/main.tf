@@ -110,7 +110,7 @@ resource "azurerm_monitor_data_collection_rule_association" "prometheus_dcra" {
   data_collection_rule_id = azurerm_monitor_data_collection_rule.prometheus_dcr.id
 }
 
-# --- Diagnostic Settings Fan-Out ---
+# --- Diagnostic Settings Fan-Out (v2) ---
 
 resource "azurerm_monitor_diagnostic_setting" "aks" {
   name                       = "aks-diagnostics-${var.environment}-v2"
