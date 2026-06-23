@@ -141,6 +141,6 @@ variable "enable_role_assignments" {
 variable "aks_vm_size" {
   type        = string
   description = "Virtual machine size for the AKS cluster nodes"
-  default     = "Standard_D2s_v5"
+  default     = "Standard_D2ads_v6"
 }
 
