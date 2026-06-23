@@ -40,6 +40,12 @@ variable "openai_model_version" {
   default     = "2025-11-13"
 }
 
+variable "openai_sku_capacity" {
+  type        = number
+  description = "TPM capacity units for the OpenAI deployment (1 unit = 1000 tokens/min). Min 1, recommended 50+."
+  default     = 50
+}
+
 variable "openai_direct_dns_zone_id" {
   type        = string
   description = "ID of the Private DNS Zone for direct openai.azure.com"
