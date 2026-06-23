@@ -57,7 +57,7 @@ resource "azurerm_application_gateway" "appgw" {
     path                  = "/"
     port                  = 80
     protocol              = "Http"
-    request_timeout       = 60
+    request_timeout       = 300
   }
 
   http_listener {
