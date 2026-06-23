@@ -173,7 +173,7 @@ resource "random_string" "jwt_secret" {
 
 resource "azurerm_key_vault_secret" "openai_endpoint" {
   name         = "openai-endpoint"
-  value        = module.openai.openai_endpoint
+  value        = replace(module.openai.openai_endpoint, "cognitiveservices.azure.com", "openai.azure.com")
   key_vault_id = module.keyvault.resource_id
   depends_on   = [module.keyvault]
 }
@@ -292,7 +292,7 @@ resource "azurerm_key_vault_secret" "azure_doc_intel_key" {
 
 resource "azurerm_key_vault_secret" "azure_openai_endpoint" {
   name         = "azure-openai-endpoint"
-  value        = module.openai.openai_endpoint
+  value        = replace(module.openai.openai_endpoint, "cognitiveservices.azure.com", "openai.azure.com")
   key_vault_id = module.keyvault.resource_id
   depends_on   = [module.keyvault]
 }
