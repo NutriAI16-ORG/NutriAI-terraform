@@ -34,7 +34,7 @@ module "aks" {
 
   default_agent_pool = {
     name                = "systempool"
-    vm_size             = var.vm_size
+    vm_size             = var.aks_vm_size
     count_of            = 1
     vnet_subnet_id      = module.vnet.subnets["aks"].resource_id
     enable_auto_scaling = true
@@ -48,12 +48,12 @@ module "aks" {
     userpool = {
       name                = "userpool"
       mode                = "User"
-      vm_size             = var.vm_size
+      vm_size             = var.aks_vm_size
       count_of            = 2
       vnet_subnet_id      = module.vnet.subnets["aks"].resource_id
       enable_auto_scaling = true
       min_count           = 1
-      max_count           = 3
+      max_count           = 2
       os_disk_size_gb     = 30
       availability_zones  = ["1", "3"]
     }
