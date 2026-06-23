@@ -44,6 +44,21 @@ module "aks" {
     availability_zones  = ["1", "3"]
   }
 
+  agent_pools = {
+    userpool = {
+      name                = "userpool"
+      mode                = "User"
+      vm_size             = var.vm_size
+      count_of            = 2
+      vnet_subnet_id      = module.vnet.subnets["aks"].resource_id
+      enable_auto_scaling = true
+      min_count           = 1
+      max_count           = 3
+      os_disk_size_gb     = 30
+      availability_zones  = ["1", "3"]
+    }
+  }
+
   managed_identities = {
     system_assigned            = false
     user_assigned_resource_ids = [module.identity.aks_cluster_identity_id]
