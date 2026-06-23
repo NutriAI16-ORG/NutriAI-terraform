@@ -317,3 +317,8 @@ resource "azurerm_subnet_route_table_association" "aks_rt" {
   subnet_id      = module.vnet.subnets["aks"].resource_id
   route_table_id = azurerm_route_table.aks_rt.id
 }
+
+resource "azurerm_subnet_route_table_association" "appgw_rt" {
+  subnet_id      = module.vnet.subnets["appgw"].resource_id
+  route_table_id = azurerm_route_table.aks_rt.id
+}
