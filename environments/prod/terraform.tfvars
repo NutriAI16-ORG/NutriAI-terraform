@@ -9,7 +9,7 @@
 
 environment             = "prod"
 resource_group_name     = "nutriai-rg-prod"
-location                = "japanwest"
+location                = "East US 2"
 enable_role_assignments = false
 
 # Networking
@@ -28,11 +28,11 @@ postgres_admin_user = "nutriai_admin"
 # postgres_admin_password → injected from GitHub Secrets at pipeline runtime
 
 # Jump VM
-vm_size = "Standard_D2s_v3"
+vm_size = "Standard_D2alds_v6"
 # vm_admin_password → injected from GitHub Secrets at pipeline runtime
 
 # Resource naming
-keyvault_name    = "nutriai-kv-prod-v2"
+keyvault_name    = "nutriai-kv-prod-v3"
 acr_name         = "nutriaiacrprod"
 aks_cluster_name = "nutriai-aks-prod"
 

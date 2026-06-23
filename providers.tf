@@ -23,7 +23,7 @@ terraform {
   backend "azurerm" {
     # Dynamically configured via backend configuration files or CLI options:
     resource_group_name  = "Yaswanth-RG"
-    storage_account_name = "yashtfstateaccount"
+    storage_account_name = "yashtfstateacc"
     container_name       = "tfstate"
     key                  = "nutriai.tfstate"
   }

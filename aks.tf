@@ -75,3 +75,4 @@ module "aks" {
     Project     = "NutriAI"
   }
 }
+
