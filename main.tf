@@ -193,33 +193,6 @@ resource "random_string" "jwt_secret" {
   special = false
 }
 
-resource "azurerm_key_vault_secret" "openai_endpoint" {
-  name         = "openai-endpoint"
-  value        = replace(module.openai.openai_endpoint, "cognitiveservices.azure.com", "openai.azure.com")
-  key_vault_id = module.keyvault.resource_id
-  depends_on   = [module.keyvault]
-}
-
-resource "azurerm_key_vault_secret" "openai_key" {
-  name         = "openai-key"
-  value        = module.openai.openai_primary_key
-  key_vault_id = module.keyvault.resource_id
-  depends_on   = [module.keyvault]
-}
-
-resource "azurerm_key_vault_secret" "doc_intel_endpoint" {
-  name         = "document-intelligence-endpoint"
-  value        = module.document_intelligence.doc_intel_endpoint
-  key_vault_id = module.keyvault.resource_id
-  depends_on   = [module.keyvault]
-}
-
-resource "azurerm_key_vault_secret" "doc_intel_key" {
-  name         = "document-intelligence-key"
-  value        = module.document_intelligence.doc_intel_primary_key
-  key_vault_id = module.keyvault.resource_id
-  depends_on   = [module.keyvault]
-}
 
 resource "azurerm_key_vault_secret" "postgres_host" {
   name         = "postgres-host"
@@ -242,12 +215,6 @@ resource "azurerm_key_vault_secret" "postgres_password" {
   depends_on   = [module.keyvault]
 }
 
-resource "azurerm_key_vault_secret" "storage_connection_string" {
-  name         = "storage-connection-string"
-  value        = azurerm_storage_account.storage.primary_connection_string
-  key_vault_id = module.keyvault.resource_id
-  depends_on   = [module.keyvault]
-}
 
 resource "azurerm_key_vault_secret" "database_url" {
   name         = "database-url"
