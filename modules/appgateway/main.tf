@@ -90,7 +90,8 @@ resource "azurerm_application_gateway" "appgw" {
       ssl_certificate,
       tags,
       url_path_map,
-      redirect_configuration
+      redirect_configuration,
+      identity
     ]
   }
 
