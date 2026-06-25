@@ -156,14 +156,6 @@ module "vm" {
   vm_size             = var.vm_size
 }
 
-# --- Module 10: Redis Cache ---
-module "redis" {
-  source              = "./modules/redis"
-  resource_group_name = azurerm_resource_group.rg.name
-  location            = "East US"
-  environment         = var.environment
-  redis_name          = "nutriai-redis-${var.environment}"
-}
 
 # --- Federated Workload Identity Credential ---
 resource "azurerm_federated_identity_credential" "aks_workload_fed" {
@@ -329,13 +321,6 @@ resource "azurerm_key_vault_secret" "appinsights_connection_string" {
   depends_on   = [module.keyvault]
 }
 
-# --- Save Redis Connection String to Key Vault ---
-resource "azurerm_key_vault_secret" "redis_connection_string" {
-  name         = "redis-connection-string"
-  value        = module.redis.redis_primary_connection_string
-  key_vault_id = module.keyvault.resource_id
-  depends_on   = [module.keyvault, module.redis]
-}
 
 
 # --- AGIC (Application Gateway Ingress Controller) Role Assignments ---
