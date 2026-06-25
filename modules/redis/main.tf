@@ -4,6 +4,9 @@ resource "azurerm_managed_redis" "redis" {
   resource_group_name = var.resource_group_name
   sku_name            = "Balanced_B0"
 
+  default_database {
+  }
+
   tags = {
     Environment = var.environment
     Project     = "NutriAI"

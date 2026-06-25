@@ -168,7 +168,6 @@ module "redis" {
 # --- Federated Workload Identity Credential ---
 resource "azurerm_federated_identity_credential" "aks_workload_fed" {
   name                = "nutriai-k8s-federation-${var.environment}"
-  resource_group_name = azurerm_resource_group.rg.name
   audience            = ["api://AzureADTokenExchange"]
   issuer              = module.aks.oidc_issuer_profile_issuer_url
   parent_id           = module.identity.workload_identity_id
