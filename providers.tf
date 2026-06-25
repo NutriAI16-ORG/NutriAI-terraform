@@ -22,6 +22,10 @@ terraform {
       source  = "hashicorp/tls"
       version = ">= 4.0.0"
     }
+    time = {
+      source  = "hashicorp/time"
+      version = ">= 0.9.0"
+    }
   }
 
   backend "azurerm" {
@@ -52,3 +56,5 @@ provider "azuread" {}
 provider "random" {}
 
 provider "azapi" {}
+
+provider "time" {}

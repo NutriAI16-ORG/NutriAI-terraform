@@ -165,11 +165,11 @@ module "vm" {
 
 # --- Federated Workload Identity Credential ---
 resource "azurerm_federated_identity_credential" "aks_workload_fed" {
-  name                = "nutriai-k8s-federation-${var.environment}"
-  audience            = ["api://AzureADTokenExchange"]
-  issuer              = module.aks.oidc_issuer_profile_issuer_url
-  parent_id           = module.identity.workload_identity_id
-  subject             = "system:serviceaccount:nutriai-${var.environment}:nutriai-service-account"
+  name      = "nutriai-k8s-federation-${var.environment}"
+  audience  = ["api://AzureADTokenExchange"]
+  issuer    = module.aks.oidc_issuer_profile_issuer_url
+  parent_id = module.identity.workload_identity_id
+  subject   = "system:serviceaccount:nutriai-${var.environment}:nutriai-service-account"
 }
 
 # --- Provisioning Application Storage Account and Container ---
@@ -194,6 +194,15 @@ resource "azurerm_storage_container" "storage_container" {
   container_access_type = "private"
 }
 
+# --- Key Expiry Calculations ---
+resource "time_offset" "secret_expiry_90" {
+  offset_days = 90
+}
+
+resource "time_offset" "secret_expiry_180" {
+  offset_days = 180
+}
+
 # --- Key Vault Secrets Provisioning ---
 
 resource "random_string" "jwt_secret" {
@@ -203,116 +212,130 @@ resource "random_string" "jwt_secret" {
 
 
 resource "azurerm_key_vault_secret" "postgres_host" {
-  name         = "postgres-host"
-  value        = module.postgres.postgres_fqdn
-  key_vault_id = module.keyvault.resource_id
-  content_type = "text/plain"
-  depends_on   = [module.keyvault]
+  name            = "postgres-host"
+  value           = module.postgres.postgres_fqdn
+  key_vault_id    = module.keyvault.resource_id
+  content_type    = "text/plain"
+  expiration_date = time_offset.secret_expiry_90.rfc3339
+  depends_on      = [module.keyvault]
 }
 
 resource "azurerm_key_vault_secret" "postgres_user" {
-  name         = "postgres-user"
-  value        = var.postgres_admin_user
-  key_vault_id = module.keyvault.resource_id
-  content_type = "text/plain"
-  depends_on   = [module.keyvault]
+  name            = "postgres-user"
+  value           = var.postgres_admin_user
+  key_vault_id    = module.keyvault.resource_id
+  content_type    = "text/plain"
+  expiration_date = time_offset.secret_expiry_90.rfc3339
+  depends_on      = [module.keyvault]
 }
 
 resource "azurerm_key_vault_secret" "postgres_password" {
-  name         = "postgres-password"
-  value        = var.postgres_admin_password
-  key_vault_id = module.keyvault.resource_id
-  content_type = "password"
-  depends_on   = [module.keyvault]
+  name            = "postgres-password"
+  value           = var.postgres_admin_password
+  key_vault_id    = module.keyvault.resource_id
+  content_type    = "password"
+  expiration_date = time_offset.secret_expiry_90.rfc3339
+  depends_on      = [module.keyvault]
 }
 
 
 resource "azurerm_key_vault_secret" "database_url" {
-  name         = "database-url"
-  value        = "postgresql://${var.postgres_admin_user}:${var.postgres_admin_password}@${module.postgres.postgres_fqdn}:5432/${module.postgres.postgres_database_name}"
-  key_vault_id = module.keyvault.resource_id
-  content_type = "connection-string"
-  depends_on   = [module.keyvault]
+  name            = "database-url"
+  value           = "postgresql://${var.postgres_admin_user}:${var.postgres_admin_password}@${module.postgres.postgres_fqdn}:5432/${module.postgres.postgres_database_name}"
+  key_vault_id    = module.keyvault.resource_id
+  content_type    = "connection-string"
+  expiration_date = time_offset.secret_expiry_90.rfc3339
+  depends_on      = [module.keyvault]
 }
 
 resource "azurerm_key_vault_secret" "jwt_secret_key" {
-  name         = "jwt-secret-key"
-  value        = random_string.jwt_secret.result
-  key_vault_id = module.keyvault.resource_id
-  content_type = "password"
-  depends_on   = [module.keyvault]
+  name            = "jwt-secret-key"
+  value           = random_string.jwt_secret.result
+  key_vault_id    = module.keyvault.resource_id
+  content_type    = "password"
+  expiration_date = time_offset.secret_expiry_90.rfc3339
+  depends_on      = [module.keyvault]
 }
 
 resource "azurerm_key_vault_secret" "entra_client_id" {
-  name         = "entra-client-id"
-  value        = var.entra_client_id
-  key_vault_id = module.keyvault.resource_id
-  content_type = "text/plain"
-  depends_on   = [module.keyvault]
+  name            = "entra-client-id"
+  value           = var.entra_client_id
+  key_vault_id    = module.keyvault.resource_id
+  content_type    = "text/plain"
+  expiration_date = time_offset.secret_expiry_90.rfc3339
+  depends_on      = [module.keyvault]
 }
 
 resource "azurerm_key_vault_secret" "entra_tenant_id" {
-  name         = "entra-tenant-id"
-  value        = var.entra_tenant_id
-  key_vault_id = module.keyvault.resource_id
-  content_type = "text/plain"
-  depends_on   = [module.keyvault]
+  name            = "entra-tenant-id"
+  value           = var.entra_tenant_id
+  key_vault_id    = module.keyvault.resource_id
+  content_type    = "text/plain"
+  expiration_date = time_offset.secret_expiry_90.rfc3339
+  depends_on      = [module.keyvault]
 }
 
 resource "azurerm_key_vault_secret" "entra_client_secret" {
-  name         = "entra-client-secret"
-  value        = var.entra_client_secret
-  key_vault_id = module.keyvault.resource_id
-  content_type = "password"
-  depends_on   = [module.keyvault]
+  name            = "entra-client-secret"
+  value           = var.entra_client_secret
+  key_vault_id    = module.keyvault.resource_id
+  content_type    = "password"
+  expiration_date = time_offset.secret_expiry_90.rfc3339
+  depends_on      = [module.keyvault]
 }
 
 resource "azurerm_key_vault_secret" "entra_redirect_uri" {
-  name         = "entra-redirect-uri"
-  value        = var.entra_redirect_uri
-  key_vault_id = module.keyvault.resource_id
-  content_type = "text/plain"
-  depends_on   = [module.keyvault]
+  name            = "entra-redirect-uri"
+  value           = var.entra_redirect_uri
+  key_vault_id    = module.keyvault.resource_id
+  content_type    = "text/plain"
+  expiration_date = time_offset.secret_expiry_90.rfc3339
+  depends_on      = [module.keyvault]
 }
 
 resource "azurerm_key_vault_secret" "azure_storage_connection_string" {
-  name         = "azure-storage-connection-string"
-  value        = azurerm_storage_account.storage.primary_connection_string
-  key_vault_id = module.keyvault.resource_id
-  content_type = "connection-string"
-  depends_on   = [module.keyvault]
+  name            = "azure-storage-connection-string"
+  value           = azurerm_storage_account.storage.primary_connection_string
+  key_vault_id    = module.keyvault.resource_id
+  content_type    = "connection-string"
+  expiration_date = time_offset.secret_expiry_90.rfc3339
+  depends_on      = [module.keyvault]
 }
 
 resource "azurerm_key_vault_secret" "azure_doc_intel_endpoint" {
-  name         = "azure-document-intelligence-endpoint"
-  value        = module.document_intelligence.doc_intel_endpoint
-  key_vault_id = module.keyvault.resource_id
-  content_type = "text/plain"
-  depends_on   = [module.keyvault]
+  name            = "azure-document-intelligence-endpoint"
+  value           = module.document_intelligence.doc_intel_endpoint
+  key_vault_id    = module.keyvault.resource_id
+  content_type    = "text/plain"
+  expiration_date = time_offset.secret_expiry_90.rfc3339
+  depends_on      = [module.keyvault]
 }
 
 resource "azurerm_key_vault_secret" "azure_doc_intel_key" {
-  name         = "azure-document-intelligence-key"
-  value        = module.document_intelligence.doc_intel_primary_key
-  key_vault_id = module.keyvault.resource_id
-  content_type = "password"
-  depends_on   = [module.keyvault]
+  name            = "azure-document-intelligence-key"
+  value           = module.document_intelligence.doc_intel_primary_key
+  key_vault_id    = module.keyvault.resource_id
+  content_type    = "password"
+  expiration_date = time_offset.secret_expiry_90.rfc3339
+  depends_on      = [module.keyvault]
 }
 
 resource "azurerm_key_vault_secret" "azure_openai_endpoint" {
-  name         = "azure-openai-endpoint"
-  value        = replace(module.openai.openai_endpoint, "cognitiveservices.azure.com", "openai.azure.com")
-  key_vault_id = module.keyvault.resource_id
-  content_type = "text/plain"
-  depends_on   = [module.keyvault]
+  name            = "azure-openai-endpoint"
+  value           = replace(module.openai.openai_endpoint, "cognitiveservices.azure.com", "openai.azure.com")
+  key_vault_id    = module.keyvault.resource_id
+  content_type    = "text/plain"
+  expiration_date = time_offset.secret_expiry_90.rfc3339
+  depends_on      = [module.keyvault]
 }
 
 resource "azurerm_key_vault_secret" "azure_openai_key" {
-  name         = "azure-openai-key"
-  value        = module.openai.openai_primary_key
-  key_vault_id = module.keyvault.resource_id
-  content_type = "password"
-  depends_on   = [module.keyvault]
+  name            = "azure-openai-key"
+  value           = module.openai.openai_primary_key
+  key_vault_id    = module.keyvault.resource_id
+  content_type    = "password"
+  expiration_date = time_offset.secret_expiry_90.rfc3339
+  depends_on      = [module.keyvault]
 }
 
 
@@ -323,59 +346,66 @@ resource "azurerm_key_vault_secret" "azure_openai_key" {
 
 
 resource "azurerm_key_vault_secret" "smtp_username" {
-  name         = "smtp-username"
-  value        = var.smtp_username
-  key_vault_id = module.keyvault.resource_id
-  content_type = "text/plain"
-  depends_on   = [module.keyvault]
+  name            = "smtp-username"
+  value           = var.smtp_username
+  key_vault_id    = module.keyvault.resource_id
+  content_type    = "text/plain"
+  expiration_date = time_offset.secret_expiry_90.rfc3339
+  depends_on      = [module.keyvault]
 }
 
 resource "azurerm_key_vault_secret" "smtp_password" {
-  name         = "smtp-password"
-  value        = var.smtp_password
-  key_vault_id = module.keyvault.resource_id
-  content_type = "password"
-  depends_on   = [module.keyvault]
+  name            = "smtp-password"
+  value           = var.smtp_password
+  key_vault_id    = module.keyvault.resource_id
+  content_type    = "password"
+  expiration_date = time_offset.secret_expiry_90.rfc3339
+  depends_on      = [module.keyvault]
 }
 
 resource "azurerm_key_vault_secret" "appinsights_connection_string" {
-  name         = "applicationinsights-connection-string"
-  value        = module.monitoring.application_insights_connection_string
-  key_vault_id = module.keyvault.resource_id
-  content_type = "connection-string"
-  depends_on   = [module.keyvault]
+  name            = "applicationinsights-connection-string"
+  value           = module.monitoring.application_insights_connection_string
+  key_vault_id    = module.keyvault.resource_id
+  content_type    = "connection-string"
+  expiration_date = time_offset.secret_expiry_90.rfc3339
+  depends_on      = [module.keyvault]
 }
 
 resource "azurerm_key_vault_secret" "redis_password" {
-  name         = "redis-password"
-  value        = var.redis_password
-  key_vault_id = module.keyvault.resource_id
-  content_type = "password"
-  depends_on   = [module.keyvault]
+  name            = "redis-password"
+  value           = var.redis_password
+  key_vault_id    = module.keyvault.resource_id
+  content_type    = "password"
+  expiration_date = time_offset.secret_expiry_90.rfc3339
+  depends_on      = [module.keyvault]
 }
 
 resource "azurerm_key_vault_secret" "redis_url" {
-  name         = "redis-url"
-  value        = "redis://:${var.redis_password}@redis:6379/0"
-  key_vault_id = module.keyvault.resource_id
-  content_type = "connection-string"
-  depends_on   = [module.keyvault]
+  name            = "redis-url"
+  value           = "redis://:${var.redis_password}@redis:6379/0"
+  key_vault_id    = module.keyvault.resource_id
+  content_type    = "connection-string"
+  expiration_date = time_offset.secret_expiry_90.rfc3339
+  depends_on      = [module.keyvault]
 }
 
 resource "azurerm_key_vault_secret" "vm_ssh_private_key" {
-  name         = "vm-ssh-private-key"
-  value        = tls_private_key.vm_ssh.private_key_pem
-  key_vault_id = module.keyvault.resource_id
-  content_type = "private-key"
-  depends_on   = [module.keyvault]
+  name            = "vm-ssh-private-key"
+  value           = tls_private_key.vm_ssh.private_key_pem
+  key_vault_id    = module.keyvault.resource_id
+  content_type    = "private-key"
+  expiration_date = time_offset.secret_expiry_180.rfc3339
+  depends_on      = [module.keyvault]
 }
 
 resource "azurerm_key_vault_secret" "vm_ssh_public_key" {
-  name         = "vm-ssh-public-key"
-  value        = tls_private_key.vm_ssh.public_key_openssh
-  key_vault_id = module.keyvault.resource_id
-  content_type = "public-key"
-  depends_on   = [module.keyvault]
+  name            = "vm-ssh-public-key"
+  value           = tls_private_key.vm_ssh.public_key_openssh
+  key_vault_id    = module.keyvault.resource_id
+  content_type    = "public-key"
+  expiration_date = time_offset.secret_expiry_180.rfc3339
+  depends_on      = [module.keyvault]
 }
 
 
