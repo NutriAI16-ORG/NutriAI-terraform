@@ -144,4 +144,10 @@ variable "redis_password" {
   sensitive   = true
 }
 
+variable "admin_object_id" {
+  type        = string
+  description = "Object ID of the admin's personal Azure AD account — grants Key Vault Secrets User access for portal/Bastion SSH key retrieval"
+  default     = ""
+}
+
 
