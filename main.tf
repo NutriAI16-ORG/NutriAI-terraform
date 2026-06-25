@@ -160,7 +160,7 @@ module "vm" {
 module "redis" {
   source              = "./modules/redis"
   resource_group_name = azurerm_resource_group.rg.name
-  location            = azurerm_resource_group.rg.location
+  location            = "East US"
   environment         = var.environment
   redis_name          = "nutriai-redis-${var.environment}"
 }
