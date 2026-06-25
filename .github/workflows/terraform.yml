@@ -74,9 +74,16 @@ jobs:
 
       # Scan Terraform configuration files for security vulnerabilities using tfsec
       - name: "Run tfsec security scan"
-        uses: aquasecurity/tfsec-action@v1.0.0
-        with:
-          soft-fail: true
+        run: |
+          if ! command -v tfsec &> /dev/null; then
+            echo "Installing tfsec..."
+            curl -sLo tfsec https://github.com/aquasecurity/tfsec/releases/latest/download/tfsec-linux-amd64
+            chmod +x tfsec
+            ./tfsec --soft-fail .
+          else
+            tfsec --soft-fail .
+          fi
+
 
       # Step 2: Set environment variables based on the active branch
       - name: "Set environment variables"
