@@ -58,10 +58,6 @@ resource "azurerm_linux_virtual_machine" "vm" {
   network_interface_ids           = [azurerm_network_interface.vm_nic.id]
   custom_data                     = base64encode(local.install_script)
 
-  identity {
-    type = "SystemAssigned"
-  }
-
   admin_ssh_key {
     username   = "azureuser"
     public_key = var.ssh_public_key
