@@ -78,6 +78,12 @@ module "aks" {
     }
   }
 
+  azure_monitor_profile = {
+    metrics = {
+      enabled = true
+    }
+  }
+
   addon_profile_ingress_application_gateway = {
     enabled = true
     config = {
