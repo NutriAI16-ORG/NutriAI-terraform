@@ -19,6 +19,9 @@ module "vnet" {
     aks = {
       name             = "aks-subnet"
       address_prefixes = [var.subnet_prefixes["aks"]]
+      nat_gateway = {
+        id = azurerm_nat_gateway.nat.id
+      }
     }
     database = {
       name             = "db-subnet"
