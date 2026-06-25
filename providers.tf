@@ -18,6 +18,10 @@ terraform {
       source  = "azure/azapi"
       version = ">= 1.13.0"
     }
+    tls = {
+      source  = "hashicorp/tls"
+      version = ">= 4.0.0"
+    }
   }
 
   backend "azurerm" {

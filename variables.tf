@@ -46,12 +46,6 @@ variable "postgres_admin_password" {
   sensitive   = true
 }
 
-variable "vm_admin_password" {
-  type        = string
-  description = "Administrator password for VM authentication"
-  sensitive   = true
-}
-
 variable "vm_size" {
   type        = string
   description = "Virtual machine size for build/docker host"

@@ -18,10 +18,9 @@ variable "vm_subnet_id" {
   description = "ID of the subnet hosting the VM"
 }
 
-variable "admin_password" {
+variable "ssh_public_key" {
   type        = string
-  description = "Password for VM admin authentication"
-  sensitive   = true
+  description = "SSH public key for VM authentication"
 }
 
 variable "vm_size" {

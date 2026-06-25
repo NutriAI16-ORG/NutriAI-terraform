@@ -52,7 +52,6 @@ jobs:
 
     env:
       TF_VAR_postgres_admin_password: ${{ secrets.POSTGRES_ADMIN_PASSWORD }}
-      TF_VAR_vm_admin_password: ${{ secrets.VM_ADMIN_PASSWORD }}
       TF_VAR_smtp_username: ${{ secrets.SMTP_USERNAME }}
       TF_VAR_smtp_password: ${{ secrets.SMTP_PASSWORD }}
       TF_VAR_entra_tenant_id: ${{ secrets.ENTRA_TENANT_ID }}

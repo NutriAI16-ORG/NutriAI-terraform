@@ -98,6 +98,7 @@ resource "azurerm_network_security_group" "appgw" {
   location            = azurerm_resource_group.rg.location
   resource_group_name = azurerm_resource_group.rg.name
 
+  #tfsec:ignore:azure-network-no-public-ingress
   security_rule {
     name                       = "Allow_HTTP_HTTPS"
     priority                   = 100
