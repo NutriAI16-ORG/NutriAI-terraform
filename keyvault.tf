@@ -78,4 +78,12 @@ module "keyvault" {
   depends_on = [azurerm_private_dns_zone_virtual_network_link.kv_dns_link]
 }
 
+# Grant the Jump VM's System-Assigned Managed Identity access to read Key Vault secrets
+resource "azurerm_role_assignment" "vm_secrets_user" {
+  count                = var.enable_role_assignments ? 1 : 0
+  scope                = module.keyvault.resource_id
+  role_definition_name = "Key Vault Secrets User"
+  principal_id         = module.vm.vm_identity_principal_id
+  principal_type       = "ServicePrincipal"
+}
 
