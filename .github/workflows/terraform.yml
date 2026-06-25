@@ -1,8 +1,5 @@
 name: "Terraform — NutriAI Infrastructure"
 
-# ============================================================
-# Triggers
-# ============================================================
 on:
   push:
     branches:
@@ -23,11 +20,10 @@ on:
           - plan
           - apply
 
-# ============================================================
+
 # Permissions
 # The self-hosted runner authenticates via its System-Assigned
 # Managed Identity — no OIDC token or stored credentials needed.
-# ============================================================
 permissions:
   contents: read
   pull-requests: write   # Allows posting plan output as PR comment

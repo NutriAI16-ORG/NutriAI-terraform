@@ -115,6 +115,18 @@ resource "azurerm_web_application_firewall_policy" "waf_policy" {
   }
 
   managed_rules {
+    exclusion {
+      match_variable          = "RequestArgNames"
+      selector                = "code"
+      selector_match_operator = "Equals"
+    }
+
+    exclusion {
+      match_variable          = "RequestArgNames"
+      selector                = "state"
+      selector_match_operator = "Equals"
+    }
+
     managed_rule_set {
       type    = "OWASP"
       version = "3.2"
