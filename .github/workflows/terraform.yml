@@ -68,15 +68,17 @@ jobs:
         working-directory: ${{ env.TF_WORKING_DIR }}
 
     steps:
-      # ────────────────────────────────────────────────────────
-      # 1. Checkout
-      # ────────────────────────────────────────────────────────
+      # Step 1: Checkout the git repository
       - name: "Checkout repository"
         uses: actions/checkout@v4
 
-      # ────────────────────────────────────────────────────────
-      # 2. Resolve environment name from branch
-      # ────────────────────────────────────────────────────────
+      # Scan Terraform configuration files for security vulnerabilities using tfsec
+      - name: "Run tfsec security scan"
+        uses: aquasecurity/tfsec-action@v1.0.0
+        with:
+          soft-fail: true
+
+      # Step 2: Set environment variables based on the active branch
       - name: "Set environment variables"
         run: |
           if [[ "${{ github.ref_name }}" == "main" ]]; then
@@ -89,9 +91,7 @@ jobs:
             echo "TF_BACKEND_KEY=nutriai-dev.tfstate"                 >> $GITHUB_ENV
           fi
 
-      # ────────────────────────────────────────────────────────
-      # Install dependencies (unzip, azure-cli, nodejs)
-      # ────────────────────────────────────────────────────────
+      # Step 3: Install necessary system dependencies (unzip, azure-cli, nodejs)
       - name: "Install dependencies"
         run: |
           if ! command -v unzip &> /dev/null; then
@@ -109,20 +109,14 @@ jobs:
             sudo apt-get install -y nodejs
           fi
 
-      # ────────────────────────────────────────────────────────
-      # 3. Install Terraform
-      # ────────────────────────────────────────────────────────
+      # Step 4: Install the specified version of Terraform
       - name: "Setup Terraform ${{ env.TF_VERSION }}"
         uses: hashicorp/setup-terraform@v3
         with:
           terraform_version: ${{ env.TF_VERSION }}
           terraform_wrapper: false
 
-      # ────────────────────────────────────────────────────────
-      # 4. Azure Login using Runner's System-Assigned Managed Identity
-      #    The runner VM already has its identity — no secrets needed.
-      #    az login picks up the IMDS endpoint automatically.
-      # ────────────────────────────────────────────────────────
+      # Step 5: Authenticate with Azure using the self-hosted runner's Managed Identity
       - name: "Azure Login (Managed Identity)"
         run: |
           az login --identity --output none
@@ -130,9 +124,7 @@ jobs:
           echo "ARM_TENANT_ID=$(az account show --query tenantId --output tsv)" >> $GITHUB_ENV
 
 
-      # ────────────────────────────────────────────────────────
-      # 6. Terraform Format Check
-      # ────────────────────────────────────────────────────────
+      # Step 6: Validate Terraform code formatting compliance
       - name: "Terraform Format Check"
         id: fmt
         run: terraform fmt -check -recursive
@@ -150,10 +142,7 @@ jobs:
               body: '❌ **Terraform fmt check failed.** Run `terraform fmt -recursive` locally and commit the changes.'
             })
 
-      # ────────────────────────────────────────────────────────
-      # 7. Terraform Init
-      #    Backend config: key is resolved per environment
-      # ────────────────────────────────────────────────────────
+      # Step 7: Initialize the Terraform configuration with the environment-specific backend key
       - name: "Terraform Init"
         id: init
         run: |
@@ -161,16 +150,12 @@ jobs:
             -backend-config="key=${{ env.TF_BACKEND_KEY }}" \
             -input=false
 
-      # ────────────────────────────────────────────────────────
-      # 8. Terraform Validate
-      # ────────────────────────────────────────────────────────
+      # Step 8: Perform a validation check of the HCL code structure
       - name: "Terraform Validate"
         id: validate
         run: terraform validate -no-color
 
-      # ────────────────────────────────────────────────────────
-      # 9. Terraform Plan
-      # ────────────────────────────────────────────────────────
+      # Step 9: Generate a speculative execution plan for the environment changes
       - name: "Terraform Plan"
         id: plan
         run: |
@@ -180,9 +165,7 @@ jobs:
             -input=false \
             -no-color 2>&1 | tee plan_output.txt
 
-      # ────────────────────────────────────────────────────────
-      # 10. Post Plan output to PR as a comment
-      # ────────────────────────────────────────────────────────
+      # Step 10: If running on a PR, post the plan output as a comment
       - name: "Post Plan to PR"
         if: github.event_name == 'pull_request'
         uses: actions/github-script@v7
@@ -205,11 +188,7 @@ jobs:
               body: body
             });
 
-      # ────────────────────────────────────────────────────────
-      # 11. Terraform Apply
-      #     - On push to main/dev (not PRs)
-      #     - OR when manually triggered with action=apply
-      # ────────────────────────────────────────────────────────
+      # Step 11: Apply the changes if pushed to main/dev or triggered manually
       - name: "Terraform Apply"
         if: >
           (github.event_name == 'push' && (github.ref_name == 'main' || github.ref_name == 'dev')) ||
