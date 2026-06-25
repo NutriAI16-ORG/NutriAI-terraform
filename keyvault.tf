@@ -64,10 +64,6 @@ module "keyvault" {
       role_definition_id_or_name = "Key Vault Reader"
       principal_id               = module.aks.kubelet_identity.objectId
     }
-    vm_secrets_user = {
-      role_definition_id_or_name = "Key Vault Secrets User"
-      principal_id               = module.vm.vm_identity_principal_id
-    }
     deployer_secrets_officer = {
       role_definition_id_or_name = "Key Vault Secrets Officer"
       principal_id               = data.azurerm_client_config.current.object_id
@@ -81,3 +77,11 @@ module "keyvault" {
 
   depends_on = [azurerm_private_dns_zone_virtual_network_link.kv_dns_link]
 }
+
+resource "azurerm_role_assignment" "vm_secrets_user" {
+  count                = var.enable_role_assignments ? 1 : 0
+  scope                = module.keyvault.resource_id
+  role_definition_name = "Key Vault Secrets User"
+  principal_id         = module.vm.vm_identity_principal_id
+}
+
