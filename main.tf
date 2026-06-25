@@ -321,6 +321,21 @@ resource "azurerm_key_vault_secret" "appinsights_connection_string" {
   depends_on   = [module.keyvault]
 }
 
+resource "azurerm_key_vault_secret" "redis_password" {
+  name         = "redis-password"
+  value        = var.redis_password
+  key_vault_id = module.keyvault.resource_id
+  depends_on   = [module.keyvault]
+}
+
+resource "azurerm_key_vault_secret" "redis_url" {
+  name         = "redis-url"
+  value        = "redis://:${var.redis_password}@redis:6379/0"
+  key_vault_id = module.keyvault.resource_id
+  depends_on   = [module.keyvault]
+}
+
+
 
 
 # --- AGIC (Application Gateway Ingress Controller) Role Assignments ---

@@ -144,3 +144,10 @@ variable "aks_vm_size" {
   default     = "Standard_D2ads_v6"
 }
 
+variable "redis_password" {
+  type        = string
+  description = "Password for self-hosted Redis cache"
+  sensitive   = true
+}
+
+
