@@ -3,8 +3,8 @@ name: "Terraform — NutriAI Infrastructure"
 on:
   push:
     branches:
-      - main   # → prod environment
-      - dev    # → dev environment
+      - main  
+      - dev    
   pull_request:
     branches:
       - main
@@ -21,18 +21,11 @@ on:
           - apply
 
 
-# Permissions
-# The self-hosted runner authenticates via its System-Assigned
-# Managed Identity — no OIDC token or stored credentials needed.
+
 permissions:
   contents: read
-  pull-requests: write   # Allows posting plan output as PR comment
+  pull-requests: write   
 
-# ============================================================
-# Environment resolution:
-#   main branch  → prod
-#   dev  branch  → dev
-# ============================================================
 env:
   TF_VERSION: "1.15.6"
   TF_WORKING_DIR: "."
