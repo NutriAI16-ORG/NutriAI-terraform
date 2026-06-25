@@ -1,18 +1,8 @@
-resource "azurerm_redis_cache" "redis" {
+resource "azurerm_managed_redis" "redis" {
   name                = var.redis_name
   location            = var.location
   resource_group_name = var.resource_group_name
-  capacity            = 1
-  family              = "C"
-  sku_name            = "Standard"
-  non_ssl_port_enabled = false
-  minimum_tls_version = "1.2"
-
-  redis_configuration {
-    maxmemory_reserved = 50
-    maxmemory_delta    = 50
-    maxmemory_policy   = "allkeys-lru"
-  }
+  sku_name            = "Balanced_B0"
 
   tags = {
     Environment = var.environment
