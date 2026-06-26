@@ -1,24 +1,24 @@
 name: "Terraform — NutriAI Infrastructure"
 
 on:
-  push:
-    branches:
-      - main  
-      - dev    
-  pull_request:
-    branches:
-      - main
-      - dev
-  workflow_dispatch:
-    inputs:
-      action:
-        description: "Terraform action to run"
-        required: true
-        default: "plan"
-        type: choice
-        options:
-          - plan
-          - apply
+#  push:
+#    branches:
+#      - main  
+#      - dev    
+#  pull_request:
+#    branches:
+#      - main
+#      - dev
+#  workflow_dispatch:
+#    inputs:
+#      action:
+#        description: "Terraform action to run"
+#        required: true
+#        default: "plan"
+#        type: choice
+#        options:
+#          - plan
+#          - apply
 
 
 
